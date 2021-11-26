@@ -5,10 +5,10 @@
       <meta charset = "utf-8" />
    </head>
    <body>
-        <h1 align="center">SVG 1D array to graph<br>&nbsp;</h1>
-        <div style="border: solid red .2em; width: 1000px; margin: 0 auto;">
+        <h1 align="center">SVG 2D array to graph<br>&nbsp;</h1>
+        <div style="border: solid greenyellow .2em; background-color: khaki; width: 1000px; margin: 0 auto;">
             <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-                <path id="s3" fill="none" stroke="red"
+                <path id="s3" fill="none" stroke="blue"
                     d = "M 0,0 L "
                 />
             </svg>
@@ -17,17 +17,16 @@
             let od = document.getElementById('s3').getAttribute('d');
             let ar = new Array();
             for(var i=0 ; i<75 ; i++){
-                ar.push(Math.floor((Math.random() * 100) + 1));
+                ar.push([Math.floor((Math.random() * 200) + 1),
+                Math.floor((Math.random() * 100) + 1)]);
             }
-            document.getElementById('s3').setAttribute('d', od + GraphArray(ar));
+            document.getElementById('s3').setAttribute('d', od + spacedXY(ar));
 
 
-
-            function GraphArray(arr){  
+            function spacedXY(arr){  
                 let str = "";
                 for (var i=0 ; i < arr.length ; i++){
-                    str += ' ' + (i*3).toString() + ',' + arr[i].toString();
-                    i++;
+                    str += ' ' + arr[i][0].toString() + ',' + arr[i][1].toString();
                 }
                 return str;
             }
