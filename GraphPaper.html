@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SVG Graph Paper</title>
+        <meta charset = "utf-8" />
+        <style type="text/css">
+            .context-menu {
+                position: absolute;
+                text-align: center;
+                background: lightgray;
+                border: 1px solid black;
+            }
+
+            .context-menu ul {
+                padding: 0px;
+                margin: 0px;
+                min-width: 150px;
+                list-style: none;
+            }
+
+            .context-menu ul li {
+                padding-bottom: 7px;
+                padding-top: 7px;
+                border: 1px solid black;
+            }
+
+            .context-menu ul li a {
+                text-decoration: none;
+                color: black;
+            }
+
+            .context-menu ul li:hover {
+                background: darkgray;
+            }
+        </style>   
+    </head>
+    <body>
+        <h2 align="center">SVG graph paper</h2>
+
+        <!-- Create a hidden Right click Menu -->
+        <div id="contextMenu" class="context-menu" 
+            style="display: none">
+            <ul>
+                <li><div onclick="makePoint()">Point</div></li>
+                <li><a href="#">Element-2</a></li>
+                <li><a href="#">Element-3</a></li>
+                <li><a href="#">Element-4</a></li>
+                <li><a href="#">Element-5</a></li>
+                <li><a href="#">Element-6</a></li>
+                <li><a href="#">Element-7</a></li>
+            </ul>
+        </div>
+
+        <!-- Draw a grid-->
+        <div id="mysvg-container" style="border: solid greenyellow .2em; background-color: khaki; width: 800px; height: 800px; margin: 0 auto;">
+            <svg id="mysvg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                <pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+                    <path d="M 8 0 L 0 0 0 8" fill="none" stroke="gray" stroke-width="0.5"/>
+                </pattern>
+                <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+                    <rect width="80" height="80" fill="url(#smallGrid)"/>
+                    <path d="M 80 0 L 0 0 0 80" fill="none" stroke="gray" stroke-width="1"/>
+                </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+
+        <script>
+            var currentEvent = {};
+            document.onclick = hideMenu;
+            document.oncontextmenu = rightClick;
+            
+            function makePoint(){
+                var svgns = "http://www.w3.org/2000/svg";
+                svgc = document.getElementById( 'mysvg' );
+                container = document.getElementById( 'mysvg-container' );
+                var circle = document.createElementNS(svgns, 'circle');
+                circle.setAttributeNS(null, 'cx', (currentEvent.pageX-container.offsetLeft) & 0xFFF8);
+                circle.setAttributeNS(null, 'cy',  (currentEvent.pageY-container.offsetTop) & 0xFFF8);
+                circle.setAttributeNS(null, 'r', 1);
+                circle.setAttributeNS(null, 'style', 'fill: none; stroke: blue; stroke-width: 2px;' );
+                svgc.appendChild(circle);
+                hideMenu();
+            }
+            function hideMenu() {
+                document.getElementById("contextMenu").style.display = "none"
+                currentEvent = {};
+            }
+            function clearEvent(){
+                currentEvent = {};
+            }
+            function rightClick(e) {
+                currentEvent = e;
+                e.preventDefault();
+        
+                if (document.getElementById("contextMenu").style.display == "block"){
+                    hideMenu();
+                }else{
+                    var menu = document.getElementById("contextMenu")
+                    menu.style.display = 'block';
+                    menu.style.left = e.pageX + "px";
+                    menu.style.top = e.pageY + "px";
+                }
+            }
+            
+            function spacedXY(arr){  
+                let str = "";
+                for (var i=0 ; i < arr.length ; i++){
+                    str += ' ' + arr[i][0].toString() + ',' + arr[i][1].toString();
+                }
+                return str;
+            }
+        </script>
+   </body>
+</html>
